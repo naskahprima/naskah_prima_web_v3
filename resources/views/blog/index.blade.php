@@ -64,9 +64,12 @@
                 </div>
 
                 <!-- Pagination -->
+                @if($posts->hasPages())
                 <div class="blog-pagination">
-                    {{ $posts->links() }}
+                    {{ $posts->withQueryString()->links('vendor.pagination.simple') }}
                 </div>
+                @endif
+                <!-- Pagination -->
                 @else
                 <div class="blog-empty">
                     <i class="fas fa-file-alt"></i>

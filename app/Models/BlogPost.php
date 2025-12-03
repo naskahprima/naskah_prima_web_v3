@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Str;
 
 class BlogPost extends Model
@@ -51,6 +52,31 @@ class BlogPost extends Model
     protected static function boot()
     {
         parent::boot();
+
+        static::creating(function ($post) {
+        if (empty($post->slug)) {
+            $post->slug = Str::slug($post->title);
+        }
+        
+        $wordCount = str_word_count(strip_tags($post->content));
+        $post->reading_time = max(1, ceil($wordCount / 200));
+        });
+
+        static::updating(function ($post) {
+            $wordCount = str_word_count(strip_tags($post->content));
+            $post->reading_time = max(1, ceil($wordCount / 200));
+        });
+
+        // AUTO GENERATE SITEMAP
+        static::saved(function ($post) {
+            if ($post->status === 'published') {
+                Artisan::call('sitemap:generate');
+            }
+        });
+
+        static::deleted(function ($post) {
+            Artisan::call('sitemap:generate');
+        });
 
         static::creating(function ($post) {
             if (empty($post->slug)) {

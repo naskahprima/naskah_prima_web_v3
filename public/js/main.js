@@ -150,11 +150,9 @@
     });
     
     // ===== FORM VALIDATION (if forms are added later) =====
-    const forms = document.querySelectorAll('form');
+    const forms = document.querySelectorAll('form:not(.search-form)');
     forms.forEach(form => {
         form.addEventListener('submit', (e) => {
-            e.preventDefault();
-            
             // Basic validation
             const inputs = form.querySelectorAll('input[required], textarea[required]');
             let isValid = true;
@@ -168,10 +166,11 @@
                 }
             });
             
-            if (isValid) {
-                // Form is valid, can proceed
+            if (!isValid) {
+                e.preventDefault();
+                console.log('Form validation failed');
+            } else {
                 console.log('Form is valid');
-                // Add your form submission logic here
             }
         });
     });
