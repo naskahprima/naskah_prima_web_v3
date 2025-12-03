@@ -1315,3 +1315,37 @@ img {
         display: none !important;
     }
 }
+
+/* Blog Search */
+.search-form {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.search-input {
+    flex: 1;
+    padding: 0.75rem 1rem;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    font-size: 0.9375rem;
+    outline: none;
+    transition: border-color 0.3s ease;
+}
+
+.search-input:focus {
+    border-color: #554d89;
+}
+
+.search-btn {
+    padding: 0.75rem 1rem;
+    background: #554d89;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+.search-btn:hover {
+    background: #443d6e;
+}

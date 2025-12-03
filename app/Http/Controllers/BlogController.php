@@ -10,23 +10,35 @@ use Illuminate\Http\Request;
 
 class BlogController extends Controller
 {
-    /**
-     * Blog index - list all published posts
-     */
-    public function index()
+    public function index(Request $request)
     {
         $settings = Setting::getAllCached();
         $whatsappUrl = $this->generateWhatsAppUrl($settings['whatsapp_number'] ?? '6281234567890');
         
-        $posts = BlogPost::published()
-            ->recent()
-            ->with(['category', 'author'])
-            ->paginate(9);
+        // Ambil search query dari URL
+        $search = $request->query('q');
+        
+        // Build query
+        $query = BlogPost::where('status', 'published')
+            ->where('published_at', '<=', now())
+            ->orderBy('published_at', 'desc')
+            ->with(['category', 'author']);
+        
+        // Filter jika ada search
+        if (!empty($search)) {
+            $query->where(function ($q) use ($search) {
+                $q->where('title', 'like', '%' . $search . '%')
+                  ->orWhere('content', 'like', '%' . $search . '%')
+                  ->orWhere('excerpt', 'like', '%' . $search . '%');
+            });
+        }
+        
+        $posts = $query->paginate(9);
         
         $categories = BlogCategory::active()
             ->ordered()
-            ->withCount(['posts' => function ($query) {
-                $query->published();
+            ->withCount(['posts' => function ($q) {
+                $q->where('status', 'published');
             }])
             ->get();
         
@@ -37,27 +49,23 @@ class BlogController extends Controller
             'posts',
             'categories',
             'popularTags',
-            'whatsappUrl'
+            'whatsappUrl',
+            'search'
         ));
     }
 
-    /**
-     * Show single blog post
-     */
     public function show(string $slug)
     {
         $settings = Setting::getAllCached();
         $whatsappUrl = $this->generateWhatsAppUrl($settings['whatsapp_number'] ?? '6281234567890');
         
         $post = BlogPost::where('slug', $slug)
-            ->published()
+            ->where('status', 'published')
             ->with(['category', 'author', 'tags'])
             ->firstOrFail();
         
-        // Increment view count
         $post->incrementViewCount();
         
-        // Get related posts
         $relatedPosts = $post->getRelatedPosts(3);
         
         return view('blog.show', compact(
@@ -68,32 +76,28 @@ class BlogController extends Controller
         ));
     }
 
-    /**
-     * Show posts by category
-     */
     public function category(string $slug)
     {
         $settings = Setting::getAllCached();
         $whatsappUrl = $this->generateWhatsAppUrl($settings['whatsapp_number'] ?? '6281234567890');
         
-        $category = BlogCategory::where('slug', $slug)
-            ->active()
-            ->firstOrFail();
+        $category = BlogCategory::where('slug', $slug)->firstOrFail();
         
-        $posts = BlogPost::published()
+        $posts = BlogPost::where('status', 'published')
             ->where('blog_category_id', $category->id)
-            ->recent()
+            ->orderBy('published_at', 'desc')
             ->with(['category', 'author'])
             ->paginate(9);
         
         $categories = BlogCategory::active()
             ->ordered()
-            ->withCount(['posts' => function ($query) {
-                $query->published();
+            ->withCount(['posts' => function ($q) {
+                $q->where('status', 'published');
             }])
             ->get();
         
         $popularTags = BlogTag::getPopular(10);
+        $search = null;
         
         return view('blog.index', compact(
             'settings',
@@ -101,13 +105,11 @@ class BlogController extends Controller
             'categories',
             'popularTags',
             'whatsappUrl',
-            'category'
+            'category',
+            'search'
         ));
     }
 
-    /**
-     * Show posts by tag
-     */
     public function tag(string $slug)
     {
         $settings = Setting::getAllCached();
@@ -116,19 +118,20 @@ class BlogController extends Controller
         $tag = BlogTag::where('slug', $slug)->firstOrFail();
         
         $posts = $tag->posts()
-            ->published()
-            ->recent()
+            ->where('status', 'published')
+            ->orderBy('published_at', 'desc')
             ->with(['category', 'author'])
             ->paginate(9);
         
         $categories = BlogCategory::active()
             ->ordered()
-            ->withCount(['posts' => function ($query) {
-                $query->published();
+            ->withCount(['posts' => function ($q) {
+                $q->where('status', 'published');
             }])
             ->get();
         
         $popularTags = BlogTag::getPopular(10);
+        $search = null;
         
         return view('blog.index', compact(
             'settings',
@@ -136,13 +139,11 @@ class BlogController extends Controller
             'categories',
             'popularTags',
             'whatsappUrl',
-            'tag'
+            'tag',
+            'search'
         ));
     }
 
-    /**
-     * Generate WhatsApp URL
-     */
     private function generateWhatsAppUrl(string $number, string $message = null): string
     {
         $number = preg_replace('/[^0-9]/', '', $number);

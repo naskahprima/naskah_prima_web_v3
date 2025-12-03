@@ -78,6 +78,16 @@
 
             <!-- Sidebar -->
             <aside class="blog-sidebar">
+                <!-- Search -->
+                <div class="sidebar-widget">
+                    <h3 class="widget-title">Cari Artikel</h3>
+                    <form action="{{ route('blog.index') }}" method="GET" class="search-form">
+                        <input type="text" name="q" placeholder="Ketik kata kunci..." value="{{ $search ?? '' }}" class="search-input">
+                        <button type="submit" class="search-btn">
+                            <i class="fas fa-search"></i>
+                        </button>
+                    </form>
+                </div>
                 <!-- Categories -->
                 <div class="sidebar-widget">
                     <h3 class="widget-title">Kategori</h3>

@@ -98,7 +98,7 @@ class BlogPost extends Model
      */
     public function scopePublished($query)
     {
-        return $query->where('status', self::STATUS_PUBLISHED)
+        return $query->where('status', 'published')
                     ->where('published_at', '<=', now());
     }
 
@@ -115,7 +115,7 @@ class BlogPost extends Model
      */
     public function scopeRecent($query)
     {
-        return $query->orderByDesc('published_at');
+        return $query->orderBy('published_at', 'desc');
     }
 
     /**
