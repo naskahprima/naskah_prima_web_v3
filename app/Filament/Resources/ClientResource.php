@@ -10,6 +10,7 @@ use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
+use Filament\Notifications\Notification;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 
@@ -62,6 +63,20 @@ class ClientResource extends Resource
                             ->rows(3)
                             ->columnSpanFull(),
                     ]),
+
+                Forms\Components\Section::make('Tracking')
+                    ->schema([
+                        Forms\Components\Placeholder::make('tracking_url')
+                            ->label('Link Tracking')
+                            ->content(fn ($record) => $record ? $record->tracking_url : '-'),
+                        
+                        Forms\Components\Placeholder::make('tracking_last_viewed')
+                            ->label('Terakhir Dilihat Client')
+                            ->content(fn ($record) => $record && $record->tracking_last_viewed 
+                                ? $record->tracking_last_viewed->diffForHumans() 
+                                : 'Belum pernah dibuka'),
+                    ])->columns(2)
+                    ->hiddenOn('create'),
             ]);
     }
 
@@ -96,6 +111,34 @@ class ClientResource extends Resource
                     ->label('Naskah')
                     ->limit(30)
                     ->toggleable(),
+
+                Tables\Columns\TextColumn::make('naskah.status')
+                    ->label('Status')
+                    ->badge()
+                    ->color(fn (string $state): string => match ($state) {
+                        'Draft' => 'gray',
+                        'Submitted' => 'info',
+                        'Under Review' => 'warning',
+                        'Revision' => 'warning',
+                        'Accepted' => 'success',
+                        'Published' => 'success',
+                        'Rejected' => 'danger',
+                        default => 'gray',
+                    }),
+
+                Tables\Columns\TextColumn::make('tracking_last_viewed')
+                    ->label('Tracking Dibuka')
+                    ->since()
+                    ->placeholder('Belum pernah')
+                    ->toggleable(isToggledHiddenByDefault: true),
+
+                Tables\Columns\TextColumn::make('tracking_url')
+                    ->label('Link Tracking')
+                    ->copyable()
+                    ->copyMessage('Link berhasil dicopy!')
+                    ->copyMessageDuration(1500)
+                    ->limit(30)
+                    ->toggleable(),
                 
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime('d M Y H:i')
@@ -104,9 +147,33 @@ class ClientResource extends Resource
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
-                //
+                Tables\Filters\SelectFilter::make('naskah_status')
+                    ->label('Status Naskah')
+                    ->options([
+                        'Draft' => 'Draft',
+                        'Submitted' => 'Submitted',
+                        'Under Review' => 'Under Review',
+                        'Revision' => 'Revision',
+                        'Accepted' => 'Accepted',
+                        'Published' => 'Published',
+                        'Rejected' => 'Rejected',
+                    ])
+                    ->query(function (Builder $query, array $data): Builder {
+                        return $query->when(
+                            $data['value'],
+                            fn (Builder $query, $value): Builder => $query->whereHas('naskah', fn ($q) => $q->where('status', $value))
+                        );
+                    }),
             ])
             ->actions([
+                Tables\Actions\Action::make('kirim_wa')
+                    ->label('Kirim WA')
+                    ->icon('heroicon-o-chat-bubble-left-ellipsis')
+                    ->color('success')
+                    ->url(fn (Client $record): string => $record->whatsapp_tracking_url)
+                    ->openUrlInNewTab(),
+
+               
                 Tables\Actions\ViewAction::make(),
                 Tables\Actions\EditAction::make(),
             ])

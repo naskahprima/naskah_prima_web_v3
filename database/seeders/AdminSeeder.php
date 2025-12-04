@@ -3,25 +3,24 @@
 namespace Database\Seeders;
 
 use App\Models\User;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\DB;
 
 class AdminSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     */
     public function run(): void
     {
-        // Hapus user lama kalau ada
+        // Disable foreign key checks
+        DB::statement('SET FOREIGN_KEY_CHECKS=0;');
         User::truncate();
+        DB::statement('SET FOREIGN_KEY_CHECKS=1;');
 
         // Buat admin utama
         User::create([
             'name' => 'Admin Naskah Prima',
-            'email' => '    ',
-            'password' => Hash::make('admin@naskahprima.com'), // Password: admin123
+            'email' => 'admin@naskahprima.com',
+            'password' => Hash::make('admin@naskahprima.com'),
             'email_verified_at' => now(),
         ]);
     }

@@ -27,3 +27,6 @@ Route::prefix('blog')->name('blog.')->group(function () {
     Route::get('/tag/{slug}', [BlogController::class, 'tag'])->name('tag');
     Route::get('/{slug}', [BlogController::class, 'show'])->name('show');
 });
+
+// Tracking
+Route::get('/tracking/{token}', [App\Http\Controllers\TrackingController::class, 'show'])->name('tracking.show');
