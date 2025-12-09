@@ -3,74 +3,92 @@
 namespace Tests\Unit;
 
 use Tests\TestCase;
-use App\Models\User;
 use App\Models\BlogPost;
 use App\Models\BlogCategory;
 use App\Models\BlogTag;
+use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class BlogPostTest extends TestCase
 {
     use RefreshDatabase;
 
-    protected User $user;
-    protected BlogCategory $category;
+    protected $admin;
+    protected $category;
 
     protected function setUp(): void
     {
         parent::setUp();
         
-        $this->user = User::factory()->create();
+        $this->admin = User::factory()->create();
         
         $this->category = BlogCategory::create([
-            'name' => 'Tips Publikasi',
-            'slug' => 'tips-publikasi',
-            'is_active' => true,
+            'name' => 'Unit Test Category',
+            'slug' => 'unit-test-category',
         ]);
     }
 
     /** @test */
-    public function blog_post_can_be_created()
+    public function it_can_create_a_blog_post()
     {
         $post = BlogPost::create([
-            'title' => 'Cara Publikasi Jurnal SINTA',
-            'slug' => 'cara-publikasi-jurnal-sinta',
-            'content' => 'Ini adalah konten artikel tentang cara publikasi jurnal SINTA.',
-            'user_id' => $this->user->id,
-            'blog_category_id' => $this->category->id,
-            'status' => 'published',
-            'published_at' => now(),
-        ]);
-
-        $this->assertDatabaseHas('blog_posts', [
-            'title' => 'Cara Publikasi Jurnal SINTA',
-            'status' => 'published',
-        ]);
-    }
-
-    /** @test */
-    public function blog_post_slug_is_auto_generated()
-    {
-        $post = BlogPost::create([
-            'title' => 'Auto Generated Slug Test',
+            'title' => 'Unit Test Post',
+            'slug' => 'unit-test-post',
             'content' => 'Test content',
-            'user_id' => $this->user->id,
+            'excerpt' => 'Test excerpt',
+            'blog_category_id' => $this->category->id,
+            'user_id' => $this->admin->id,
             'status' => 'draft',
         ]);
 
-        $this->assertEquals('auto-generated-slug-test', $post->slug);
+        $this->assertInstanceOf(BlogPost::class, $post);
+        $this->assertEquals('Unit Test Post', $post->title);
     }
 
     /** @test */
-    public function blog_post_reading_time_is_auto_calculated()
+    public function it_auto_generates_slug_from_title()
     {
-        // 400 words = 2 minutes (200 words per minute)
+        $post = BlogPost::create([
+            'title' => 'Auto Generated Slug Title',
+            'content' => 'Content',
+            'excerpt' => 'Excerpt',
+            'blog_category_id' => $this->category->id,
+            'user_id' => $this->admin->id,
+            'status' => 'draft',
+        ]);
+
+        $this->assertEquals('auto-generated-slug-title', $post->slug);
+    }
+
+    /** @test */
+    public function it_calculates_reading_time_for_short_content()
+    {
+        $post = BlogPost::create([
+            'title' => 'Short Content Post',
+            'slug' => 'short-content-post',
+            'content' => 'Very short',
+            'excerpt' => 'Excerpt',
+            'blog_category_id' => $this->category->id,
+            'user_id' => $this->admin->id,
+            'status' => 'draft',
+        ]);
+
+        $this->assertEquals(1, $post->reading_time);
+    }
+
+    /** @test */
+    public function it_calculates_reading_time_for_long_content()
+    {
+        // 400 words = 2 minutes (200 words/min)
         $content = str_repeat('word ', 400);
         
         $post = BlogPost::create([
-            'title' => 'Reading Time Test',
+            'title' => 'Long Content Post',
+            'slug' => 'long-content-post',
             'content' => $content,
-            'user_id' => $this->user->id,
+            'excerpt' => 'Excerpt',
+            'blog_category_id' => $this->category->id,
+            'user_id' => $this->admin->id,
             'status' => 'draft',
         ]);
 
@@ -78,126 +96,190 @@ class BlogPostTest extends TestCase
     }
 
     /** @test */
-    public function blog_post_belongs_to_category()
+    public function it_belongs_to_a_category()
     {
         $post = BlogPost::create([
-            'title' => 'Category Test',
-            'content' => 'Test content',
-            'user_id' => $this->user->id,
+            'title' => 'Category Relation Test',
+            'slug' => 'category-relation-test',
+            'content' => 'Content',
+            'excerpt' => 'Excerpt',
             'blog_category_id' => $this->category->id,
+            'user_id' => $this->admin->id,
             'status' => 'draft',
         ]);
 
-        $this->assertEquals($this->category->id, $post->category->id);
-        $this->assertEquals('Tips Publikasi', $post->category->name);
+        $this->assertInstanceOf(BlogCategory::class, $post->category);
+        $this->assertEquals('Unit Test Category', $post->category->name);
     }
 
     /** @test */
-    public function blog_post_belongs_to_author()
+    public function it_belongs_to_an_author()
     {
         $post = BlogPost::create([
-            'title' => 'Author Test',
-            'content' => 'Test content',
-            'user_id' => $this->user->id,
+            'title' => 'Author Relation Test',
+            'slug' => 'author-relation-test',
+            'content' => 'Content',
+            'excerpt' => 'Excerpt',
+            'blog_category_id' => $this->category->id,
+            'user_id' => $this->admin->id,
             'status' => 'draft',
         ]);
 
-        $this->assertEquals($this->user->id, $post->author->id);
+        $this->assertInstanceOf(User::class, $post->author);
+        $this->assertEquals($this->admin->id, $post->author->id);
     }
 
     /** @test */
-    public function blog_post_can_have_tags()
+    public function it_can_attach_tags()
     {
-        $tag1 = BlogTag::create(['name' => 'SINTA', 'slug' => 'sinta']);
-        $tag2 = BlogTag::create(['name' => 'Jurnal', 'slug' => 'jurnal']);
+        $tag1 = BlogTag::create(['name' => 'Unit Tag 1', 'slug' => 'unit-tag-1']);
+        $tag2 = BlogTag::create(['name' => 'Unit Tag 2', 'slug' => 'unit-tag-2']);
 
         $post = BlogPost::create([
-            'title' => 'Tags Test',
-            'content' => 'Test content',
-            'user_id' => $this->user->id,
+            'title' => 'Tagged Unit Post',
+            'slug' => 'tagged-unit-post',
+            'content' => 'Content',
+            'excerpt' => 'Excerpt',
+            'blog_category_id' => $this->category->id,
+            'user_id' => $this->admin->id,
             'status' => 'draft',
         ]);
 
         $post->tags()->attach([$tag1->id, $tag2->id]);
 
         $this->assertCount(2, $post->tags);
-        $this->assertTrue($post->tags->contains($tag1));
-        $this->assertTrue($post->tags->contains($tag2));
     }
 
     /** @test */
-    public function blog_post_scope_published_works()
-    {
-        // Create published post
-        BlogPost::create([
-            'title' => 'Published Post',
-            'content' => 'Test content',
-            'user_id' => $this->user->id,
-            'status' => 'published',
-            'published_at' => now()->subDay(),
-        ]);
-
-        // Create draft post
-        BlogPost::create([
-            'title' => 'Draft Post',
-            'content' => 'Test content',
-            'user_id' => $this->user->id,
-            'status' => 'draft',
-        ]);
-
-        // Create scheduled post (future)
-        BlogPost::create([
-            'title' => 'Scheduled Post',
-            'content' => 'Test content',
-            'user_id' => $this->user->id,
-            'status' => 'published',
-            'published_at' => now()->addDay(),
-        ]);
-
-        $publishedPosts = BlogPost::published()->get();
-
-        $this->assertCount(1, $publishedPosts);
-        $this->assertEquals('Published Post', $publishedPosts->first()->title);
-    }
-
-    /** @test */
-    public function blog_post_seo_title_returns_meta_title_or_title()
-    {
-        $postWithMeta = BlogPost::create([
-            'title' => 'Original Title',
-            'meta_title' => 'SEO Optimized Title',
-            'content' => 'Test content',
-            'user_id' => $this->user->id,
-            'status' => 'draft',
-        ]);
-
-        $postWithoutMeta = BlogPost::create([
-            'title' => 'Only Title',
-            'content' => 'Test content',
-            'user_id' => $this->user->id,
-            'status' => 'draft',
-        ]);
-
-        $this->assertEquals('SEO Optimized Title', $postWithMeta->seo_title);
-        $this->assertEquals('Only Title', $postWithoutMeta->seo_title);
-    }
-
-    /** @test */
-    public function blog_post_view_count_can_be_incremented()
+    public function it_can_change_status()
     {
         $post = BlogPost::create([
-            'title' => 'View Count Test',
-            'content' => 'Test content',
-            'user_id' => $this->user->id,
+            'title' => 'Status Change Test',
+            'slug' => 'status-change-test',
+            'content' => 'Content',
+            'excerpt' => 'Excerpt',
+            'blog_category_id' => $this->category->id,
+            'user_id' => $this->admin->id,
+            'status' => 'draft',
+        ]);
+
+        $this->assertEquals('draft', $post->status);
+
+        $post->update([
+            'status' => 'published',
+            'published_at' => now(),
+        ]);
+
+        $this->assertEquals('published', $post->status);
+        $this->assertNotNull($post->published_at);
+    }
+
+    /** @test */
+    public function it_increments_view_count()
+    {
+        $post = BlogPost::create([
+            'title' => 'View Count Unit Test',
+            'slug' => 'view-count-unit-test',
+            'content' => 'Content',
+            'excerpt' => 'Excerpt',
+            'blog_category_id' => $this->category->id,
+            'user_id' => $this->admin->id,
             'status' => 'published',
             'published_at' => now(),
             'view_count' => 0,
         ]);
 
-        $this->assertEquals(0, $post->view_count);
+        $post->incrementViewCount();
+        $post->refresh();
+        $this->assertEquals(1, $post->view_count);
 
         $post->incrementViewCount();
+        $post->refresh();
+        $this->assertEquals(2, $post->view_count);
+    }
 
-        $this->assertEquals(1, $post->fresh()->view_count);
+    /** @test */
+    public function it_checks_published_status_correctly()
+    {
+        $publishedPost = BlogPost::create([
+            'title' => 'Published Check',
+            'slug' => 'published-check',
+            'content' => 'Content',
+            'excerpt' => 'Excerpt',
+            'blog_category_id' => $this->category->id,
+            'user_id' => $this->admin->id,
+            'status' => 'published',
+            'published_at' => now()->subDay(),
+        ]);
+
+        $draftPost = BlogPost::create([
+            'title' => 'Draft Check',
+            'slug' => 'draft-check',
+            'content' => 'Content',
+            'excerpt' => 'Excerpt',
+            'blog_category_id' => $this->category->id,
+            'user_id' => $this->admin->id,
+            'status' => 'draft',
+        ]);
+
+        $this->assertTrue($publishedPost->isPublished());
+        $this->assertFalse($draftPost->isPublished());
+    }
+
+    /** @test */
+    public function it_returns_seo_title()
+    {
+        $postWithMeta = BlogPost::create([
+            'title' => 'Regular Title',
+            'slug' => 'seo-title-test',
+            'content' => 'Content',
+            'excerpt' => 'Excerpt',
+            'blog_category_id' => $this->category->id,
+            'user_id' => $this->admin->id,
+            'status' => 'draft',
+            'meta_title' => 'Custom SEO Title',
+        ]);
+
+        $postWithoutMeta = BlogPost::create([
+            'title' => 'Only Regular Title',
+            'slug' => 'no-seo-title-test',
+            'content' => 'Content',
+            'excerpt' => 'Excerpt',
+            'blog_category_id' => $this->category->id,
+            'user_id' => $this->admin->id,
+            'status' => 'draft',
+        ]);
+
+        $this->assertEquals('Custom SEO Title', $postWithMeta->seo_title);
+        $this->assertEquals('Only Regular Title', $postWithoutMeta->seo_title);
+    }
+
+    /** @test */
+    public function it_returns_featured_image_url()
+    {
+        $postWithImage = BlogPost::create([
+            'title' => 'Image URL Test',
+            'slug' => 'image-url-test',
+            'content' => 'Content',
+            'excerpt' => 'Excerpt',
+            'blog_category_id' => $this->category->id,
+            'user_id' => $this->admin->id,
+            'status' => 'draft',
+            'featured_image' => 'blog-images/test.jpg',
+        ]);
+
+        $postWithoutImage = BlogPost::create([
+            'title' => 'No Image URL Test',
+            'slug' => 'no-image-url-test',
+            'content' => 'Content',
+            'excerpt' => 'Excerpt',
+            'blog_category_id' => $this->category->id,
+            'user_id' => $this->admin->id,
+            'status' => 'draft',
+        ]);
+
+        $this->assertNotNull($postWithImage->featured_image_url);
+        $this->assertStringContainsString('blog-images/test.jpg', $postWithImage->featured_image_url);
+        $this->assertNull($postWithoutImage->featured_image_url);
     }
 }

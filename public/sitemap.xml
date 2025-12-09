@@ -11,78 +11,6 @@
         <priority>0.9</priority>
             </url>
     <url>
-        <loc>http://localhost/blog/lorem-1</loc>
-        <lastmod>2025-12-09T04:45:51+00:00</lastmod>
-        <changefreq>weekly</changefreq>
-        <priority>0.8</priority>
-            </url>
-    <url>
-        <loc>http://localhost/blog/cara-memilih-jurnal-sinta-yang-tepat</loc>
-        <lastmod>2025-12-09T04:52:18+00:00</lastmod>
-        <changefreq>weekly</changefreq>
-        <priority>0.8</priority>
-            </url>
-    <url>
-        <loc>http://localhost/blog/7-kesalahan-fatal-artikel-ditolak-jurnal</loc>
-        <lastmod>2025-12-09T04:52:33+00:00</lastmod>
-        <changefreq>weekly</changefreq>
-        <priority>0.8</priority>
-            </url>
-    <url>
-        <loc>http://localhost/blog/perbedaan-sinta-1-2-3-4-5-6</loc>
-        <lastmod>2025-12-09T04:51:32+00:00</lastmod>
-        <changefreq>weekly</changefreq>
-        <priority>0.8</priority>
-            </url>
-    <url>
-        <loc>http://localhost/blog/template-artikel-jurnal-informatika</loc>
-        <lastmod>2025-12-09T04:52:51+00:00</lastmod>
-        <changefreq>weekly</changefreq>
-        <priority>0.8</priority>
-            </url>
-    <url>
-        <loc>http://localhost/blog/cara-menulis-abstrak-jurnal-ilmiah</loc>
-        <lastmod>2025-12-09T04:51:32+00:00</lastmod>
-        <changefreq>weekly</changefreq>
-        <priority>0.8</priority>
-            </url>
-    <url>
-        <loc>http://localhost/blog/proses-peer-review-jurnal</loc>
-        <lastmod>2025-12-09T04:51:32+00:00</lastmod>
-        <changefreq>weekly</changefreq>
-        <priority>0.8</priority>
-            </url>
-    <url>
-        <loc>http://localhost/blog/tips-lolos-plagiarism-check-turnitin</loc>
-        <lastmod>2025-12-09T04:51:32+00:00</lastmod>
-        <changefreq>weekly</changefreq>
-        <priority>0.8</priority>
-            </url>
-    <url>
-        <loc>http://localhost/blog/publikasi-jurnal-machine-learning-2024</loc>
-        <lastmod>2025-12-09T04:51:32+00:00</lastmod>
-        <changefreq>weekly</changefreq>
-        <priority>0.8</priority>
-            </url>
-    <url>
-        <loc>http://localhost/blog/cara-merespon-reviewer-comments</loc>
-        <lastmod>2025-12-09T04:51:32+00:00</lastmod>
-        <changefreq>weekly</changefreq>
-        <priority>0.8</priority>
-            </url>
-    <url>
-        <loc>http://localhost/blog/berapa-lama-proses-publikasi-jurnal-sinta</loc>
-        <lastmod>2025-12-09T04:51:32+00:00</lastmod>
-        <changefreq>weekly</changefreq>
-        <priority>0.8</priority>
-            </url>
-    <url>
-        <loc>http://localhost/blog/lorem</loc>
-        <lastmod>2025-12-09T05:34:29+00:00</lastmod>
-        <changefreq>weekly</changefreq>
-        <priority>0.8</priority>
-            </url>
-    <url>
         <loc>http://localhost/blog/category/tips-publikasi</loc>
             <changefreq>weekly</changefreq>
         <priority>0.7</priority>
@@ -108,17 +36,7 @@
         <priority>0.7</priority>
             </url>
     <url>
-        <loc>http://localhost/blog/category/panduan-jurnal</loc>
-            <changefreq>weekly</changefreq>
-        <priority>0.7</priority>
-            </url>
-    <url>
-        <loc>http://localhost/blog/category/tutorial</loc>
-            <changefreq>weekly</changefreq>
-        <priority>0.7</priority>
-            </url>
-    <url>
-        <loc>http://localhost/blog/category/berita</loc>
+        <loc>http://localhost/blog/category/test-category</loc>
             <changefreq>weekly</changefreq>
         <priority>0.7</priority>
             </url>
