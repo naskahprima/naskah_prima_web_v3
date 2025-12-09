@@ -83,7 +83,7 @@
             </div>
 
             <div class="hero-image">
-                <img src="{{ asset('assets/hero-illustration.svg') }}" alt="Ilustrasi publikasi jurnal ilmiah" loading="eager" width="600" height="500">
+                <img src="{{ asset('assets/hero-illustration.png') }}" alt="Ilustrasi publikasi jurnal ilmiah"  width="600" height="500" loading="lazy" >
             </div>
         </div>
     </div>
@@ -401,6 +401,73 @@
             </a>
             <p class="cta-subtext">Atau lihat <a href="#paket">paket & harga</a> terlebih dahulu</p>
         </div>
+    </div>
+</section>
+
+
+<!-- Blog Section -->
+<section class="blog-home-section" id="blog">
+    <div class="container">
+        <div class="section-header text-center">
+            <h2 class="section-title">
+                Artikel <span class="gradient-text">Terbaru</span>
+            </h2>
+            <p class="section-description">
+                Tips dan panduan seputar publikasi jurnal ilmiah untuk mahasiswa informatika
+            </p>
+        </div>
+        
+        @if($latestPosts->count() > 0)
+        <div class="blog-home-grid">
+            @foreach($latestPosts as $post)
+            <article class="blog-home-card">
+                <a href="{{ route('blog.show', $post->slug) }}" class="blog-home-image">
+                    @if($post->featured_image)
+                    <img src="{{ Storage::url($post->featured_image) }}" 
+                         alt="{{ $post->title }}" 
+                         loading="lazy">
+                    @else
+                    <div class="blog-home-placeholder">
+                        <i class="fas fa-newspaper"></i>
+                    </div>
+                    @endif
+                </a>
+                
+                <div class="blog-home-content">
+                    @if($post->category)
+                    <a href="{{ route('blog.category', $post->category->slug) }}" class="blog-home-category">
+                        {{ $post->category->name }}
+                    </a>
+                    @endif
+                    
+                    <h3 class="blog-home-title">
+                        <a href="{{ route('blog.show', $post->slug) }}">{{ $post->title }}</a>
+                    </h3>
+                    
+                    <p class="blog-home-excerpt">
+                        {{ $post->excerpt ?? Str::limit(strip_tags($post->content), 100) }}
+                    </p>
+                    
+                    <div class="blog-home-meta">
+                        <span><i class="far fa-calendar"></i> {{ $post->published_at->format('d M Y') }}</span>
+                        <span><i class="far fa-clock"></i> {{ $post->reading_time ?? '5' }} min</span>
+                    </div>
+                </div>
+            </article>
+            @endforeach
+        </div>
+        
+        <div class="blog-home-cta">
+            <a href="{{ route('blog.index') }}" class="btn btn-outline">
+                Lihat Semua Artikel <i class="fas fa-arrow-right"></i>
+            </a>
+        </div>
+        @else
+        <div class="blog-home-empty">
+            <i class="fas fa-file-alt"></i>
+            <p>Artikel blog akan segera hadir. Stay tuned!</p>
+        </div>
+        @endif
     </div>
 </section>
 @endsection

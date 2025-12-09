@@ -12,7 +12,27 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule): void
     {
-        // $schedule->command('inspire')->hourly();
+        
+        // Maintenance cleanup setiap hari jam 2 pagi
+        $schedule->command('maintenance:cleanup')
+            ->dailyAt('02:00')
+            ->appendOutputTo(storage_path('logs/maintenance.log'));
+
+        // Regenerate sitemap setiap minggu
+        $schedule->command('sitemap:generate')
+            ->weekly()
+            ->sundays()
+            ->at('03:00');
+
+        // Clear cache setiap minggu
+        $schedule->command('cache:clear')
+            ->weekly()
+            ->mondays()
+            ->at('04:00');
+
+        // Optimize database setiap bulan
+        $schedule->command('maintenance:cleanup')
+            ->monthlyOn(1, '03:00');
     }
 
     /**

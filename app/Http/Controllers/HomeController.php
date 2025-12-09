@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\BlogPost;
 use App\Models\Setting;
 use App\Models\PricingPackage;
 use App\Models\Testimonial;
@@ -32,6 +33,14 @@ class HomeController extends Controller
         
         // Generate WhatsApp URL
         $whatsappUrl = $this->generateWhatsAppUrl($settings['whatsapp_number'] ?? '6281234567890');
+
+
+        // Tambahkan ini untuk ambil 3 blog post terbaru di homepage
+        $latestPosts = BlogPost::where('status', 'published')
+            ->where('published_at', '<=', now())
+            ->orderBy('published_at', 'desc')
+            ->limit(3)
+            ->get();
         
         return view('pages.home', compact(
             'settings',
@@ -39,7 +48,8 @@ class HomeController extends Controller
             'testimonials',
             'faqs',
             'stats',
-            'whatsappUrl'
+            'whatsappUrl',
+            'latestPosts'
         ));
     }
 

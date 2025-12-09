@@ -1,37 +1,124 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1" xmlns:video="http://www.google.com/schemas/sitemap-video/1.1" xmlns:news="http://www.google.com/schemas/sitemap-news/0.9">
     <url>
-        <loc>http://127.0.0.1:8000</loc>
+        <loc>http://localhost</loc>
             <changefreq>daily</changefreq>
         <priority>1.0</priority>
             </url>
     <url>
-        <loc>http://127.0.0.1:8000/blog</loc>
+        <loc>http://localhost/blog</loc>
             <changefreq>daily</changefreq>
         <priority>0.9</priority>
             </url>
     <url>
-        <loc>http://127.0.0.1:8000/blog/category/tips-publikasi</loc>
+        <loc>http://localhost/blog/lorem-1</loc>
+        <lastmod>2025-12-09T04:45:51+00:00</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.8</priority>
+            </url>
+    <url>
+        <loc>http://localhost/blog/cara-memilih-jurnal-sinta-yang-tepat</loc>
+        <lastmod>2025-12-09T04:52:18+00:00</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.8</priority>
+            </url>
+    <url>
+        <loc>http://localhost/blog/7-kesalahan-fatal-artikel-ditolak-jurnal</loc>
+        <lastmod>2025-12-09T04:52:33+00:00</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.8</priority>
+            </url>
+    <url>
+        <loc>http://localhost/blog/perbedaan-sinta-1-2-3-4-5-6</loc>
+        <lastmod>2025-12-09T04:51:32+00:00</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.8</priority>
+            </url>
+    <url>
+        <loc>http://localhost/blog/template-artikel-jurnal-informatika</loc>
+        <lastmod>2025-12-09T04:52:51+00:00</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.8</priority>
+            </url>
+    <url>
+        <loc>http://localhost/blog/cara-menulis-abstrak-jurnal-ilmiah</loc>
+        <lastmod>2025-12-09T04:51:32+00:00</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.8</priority>
+            </url>
+    <url>
+        <loc>http://localhost/blog/proses-peer-review-jurnal</loc>
+        <lastmod>2025-12-09T04:51:32+00:00</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.8</priority>
+            </url>
+    <url>
+        <loc>http://localhost/blog/tips-lolos-plagiarism-check-turnitin</loc>
+        <lastmod>2025-12-09T04:51:32+00:00</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.8</priority>
+            </url>
+    <url>
+        <loc>http://localhost/blog/publikasi-jurnal-machine-learning-2024</loc>
+        <lastmod>2025-12-09T04:51:32+00:00</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.8</priority>
+            </url>
+    <url>
+        <loc>http://localhost/blog/cara-merespon-reviewer-comments</loc>
+        <lastmod>2025-12-09T04:51:32+00:00</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.8</priority>
+            </url>
+    <url>
+        <loc>http://localhost/blog/berapa-lama-proses-publikasi-jurnal-sinta</loc>
+        <lastmod>2025-12-09T04:51:32+00:00</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.8</priority>
+            </url>
+    <url>
+        <loc>http://localhost/blog/lorem</loc>
+        <lastmod>2025-12-09T05:34:29+00:00</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.8</priority>
+            </url>
+    <url>
+        <loc>http://localhost/blog/category/tips-publikasi</loc>
             <changefreq>weekly</changefreq>
         <priority>0.7</priority>
             </url>
     <url>
-        <loc>http://127.0.0.1:8000/blog/category/panduan</loc>
+        <loc>http://localhost/blog/category/panduan</loc>
             <changefreq>weekly</changefreq>
         <priority>0.7</priority>
             </url>
     <url>
-        <loc>http://127.0.0.1:8000/blog/category/case-study</loc>
+        <loc>http://localhost/blog/category/case-study</loc>
             <changefreq>weekly</changefreq>
         <priority>0.7</priority>
             </url>
     <url>
-        <loc>http://127.0.0.1:8000/blog/category/berita-jurnal</loc>
+        <loc>http://localhost/blog/category/berita-jurnal</loc>
             <changefreq>weekly</changefreq>
         <priority>0.7</priority>
             </url>
     <url>
-        <loc>http://127.0.0.1:8000/blog/category/informatika</loc>
+        <loc>http://localhost/blog/category/informatika</loc>
+            <changefreq>weekly</changefreq>
+        <priority>0.7</priority>
+            </url>
+    <url>
+        <loc>http://localhost/blog/category/panduan-jurnal</loc>
+            <changefreq>weekly</changefreq>
+        <priority>0.7</priority>
+            </url>
+    <url>
+        <loc>http://localhost/blog/category/tutorial</loc>
+            <changefreq>weekly</changefreq>
+        <priority>0.7</priority>
+            </url>
+    <url>
+        <loc>http://localhost/blog/category/berita</loc>
             <changefreq>weekly</changefreq>
         <priority>0.7</priority>
             </url>

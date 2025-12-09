@@ -57,12 +57,44 @@ class BlogPostResource extends Resource
                                     ->rows(3)
                                     ->helperText('Akan tampil di preview list blog'),
                                 
-                                Forms\Components\RichEditor::make('content')
-                                    ->label('Isi Artikel')
-                                    ->required()
-                                    ->columnSpanFull()
-                                    ->fileAttachmentsDisk('public')
-                                    ->fileAttachmentsDirectory('blog-attachments'),
+                                Forms\Components\Tabs::make('Content Editor')
+                                    ->tabs([
+                                        Forms\Components\Tabs\Tab::make('Visual Editor')
+                                            ->icon('heroicon-o-eye')
+                                            ->schema([
+                                                Forms\Components\RichEditor::make('content')
+                                                    ->label('Isi Artikel (Visual)')
+                                                    ->required()
+                                                    ->toolbarButtons([
+                                                        'blockquote',
+                                                        'bold',
+                                                        'bulletList',
+                                                        'codeBlock',
+                                                        'h2',
+                                                        'h3',
+                                                        'italic',
+                                                        'link',
+                                                        'orderedList',
+                                                        'redo',
+                                                        'strike',
+                                                        'underline',
+                                                        'undo',
+                                                    ])
+                                                    ->fileAttachmentsDisk('public')
+                                                    ->fileAttachmentsDirectory('blog-attachments'),
+                                            ]),
+                                        Forms\Components\Tabs\Tab::make('HTML Editor')
+                                            ->icon('heroicon-o-code-bracket')
+                                            ->schema([
+                                                Forms\Components\Textarea::make('content')
+                                                    ->label('Isi Artikel (HTML)')
+                                                    ->required()
+                                                    ->rows(20)
+                                                    ->helperText('Paste HTML langsung di sini. Gunakan tag seperti <h2>, <p>, <ul>, <ol>, <blockquote>, dll.')
+                                                    ->extraAttributes(['style' => 'font-family: monospace; font-size: 13px;']),
+                                            ]),
+                                    ])
+                                    ->columnSpanFull(),
                             ])
                             ->columns(2),
                         

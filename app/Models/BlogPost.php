@@ -49,52 +49,58 @@ class BlogPost extends Model
     /**
      * Boot method untuk auto-generate slug dan reading time
      */
+    /**
+ * Boot method untuk auto-generate slug, reading time, sitemap, dan delete image
+ */
     protected static function boot()
     {
         parent::boot();
 
+        // Auto generate slug & reading time saat create
         static::creating(function ($post) {
-        if (empty($post->slug)) {
-            $post->slug = Str::slug($post->title);
-        }
-        
-        $wordCount = str_word_count(strip_tags($post->content));
-        $post->reading_time = max(1, ceil($wordCount / 200));
-        });
-
-        static::updating(function ($post) {
+            if (empty($post->slug)) {
+                $post->slug = Str::slug($post->title);
+            }
+            
             $wordCount = str_word_count(strip_tags($post->content));
             $post->reading_time = max(1, ceil($wordCount / 200));
         });
 
-        // AUTO GENERATE SITEMAP
+        // Recalculate reading time saat update
+        static::updating(function ($post) {
+            $wordCount = str_word_count(strip_tags($post->content));
+            $post->reading_time = max(1, ceil($wordCount / 200));
+            
+            // Auto delete old image when featured_image is changed
+            if ($post->isDirty('featured_image') && $post->getOriginal('featured_image')) {
+                \Illuminate\Support\Facades\Storage::disk('public')->delete($post->getOriginal('featured_image'));
+            }
+        });
+
+        // Auto generate sitemap saat save
         static::saved(function ($post) {
             if ($post->status === 'published') {
                 Artisan::call('sitemap:generate');
             }
         });
 
+        // Auto delete image & regenerate sitemap saat delete
+        static::deleting(function ($post) {
+            // Delete featured image
+            if ($post->featured_image) {
+                \Illuminate\Support\Facades\Storage::disk('public')->delete($post->featured_image);
+            }
+            
+            // Delete OG image if different from featured
+            if ($post->og_image && $post->og_image !== $post->featured_image) {
+                \Illuminate\Support\Facades\Storage::disk('public')->delete($post->og_image);
+            }
+        });
+
         static::deleted(function ($post) {
             Artisan::call('sitemap:generate');
         });
-
-        static::creating(function ($post) {
-            if (empty($post->slug)) {
-                $post->slug = Str::slug($post->title);
-            }
-            
-            // Calculate reading time (rata-rata 200 kata per menit)
-            $wordCount = str_word_count(strip_tags($post->content));
-            $post->reading_time = max(1, ceil($wordCount / 200));
-        });
-
-        static::updating(function ($post) {
-            // Recalculate reading time
-            $wordCount = str_word_count(strip_tags($post->content));
-            $post->reading_time = max(1, ceil($wordCount / 200));
-        });
     }
-
     /**
      * Relasi ke author (user)
      */

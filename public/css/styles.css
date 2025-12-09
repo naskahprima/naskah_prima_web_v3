@@ -1449,3 +1449,207 @@ img {
     color: #9ca3af;
     cursor: not-allowed;
 }
+
+/* ========================================
+   BLOG HOME SECTION
+======================================== */
+.blog-home-section {
+    padding: var(--space-3xl) 0;
+    background: var(--light-bg);
+}
+
+.blog-home-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-lg);
+    margin-bottom: var(--space-xl);
+}
+
+@media (max-width: 991px) {
+    .blog-home-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 575px) {
+    .blog-home-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+.blog-home-card {
+    background: var(--white);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    box-shadow: var(--shadow-md);
+    transition: all var(--transition-base);
+}
+
+.blog-home-card:hover {
+    transform: translateY(-8px);
+    box-shadow: var(--shadow-xl);
+}
+
+.blog-home-image {
+    display: block;
+    aspect-ratio: 16/9;
+    overflow: hidden;
+}
+
+.blog-home-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform var(--transition-base);
+}
+
+.blog-home-card:hover .blog-home-image img {
+    transform: scale(1.05);
+}
+
+.blog-home-placeholder {
+    width: 100%;
+    height: 100%;
+    background: var(--gradient-primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.blog-home-placeholder i {
+    font-size: 3rem;
+    color: rgba(255, 255, 255, 0.5);
+}
+
+.blog-home-content {
+    padding: var(--space-md);
+}
+
+.blog-home-category {
+    display: inline-block;
+    padding: 0.25rem 0.75rem;
+    background: rgba(85, 77, 137, 0.1);
+    color: var(--primary-purple);
+    border-radius: var(--radius-full);
+    font-size: 0.75rem;
+    font-weight: var(--font-weight-semibold);
+    margin-bottom: var(--space-sm);
+    transition: all var(--transition-fast);
+}
+
+.blog-home-category:hover {
+    background: var(--primary-purple);
+    color: var(--white);
+}
+
+.blog-home-title {
+    font-size: 1.125rem;
+    line-height: 1.4;
+    margin-bottom: var(--space-sm);
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.blog-home-title a {
+    color: var(--black);
+    transition: color var(--transition-fast);
+}
+
+.blog-home-title a:hover {
+    color: var(--primary-purple);
+}
+
+.blog-home-excerpt {
+    font-size: 0.9375rem;
+    color: var(--gray-600);
+    margin-bottom: var(--space-sm);
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.blog-home-meta {
+    display: flex;
+    gap: var(--space-md);
+    font-size: 0.8125rem;
+    color: var(--gray-500);
+}
+
+.blog-home-meta i {
+    margin-right: 0.25rem;
+}
+
+.blog-home-cta {
+    text-align: center;
+}
+
+.blog-home-empty {
+    text-align: center;
+    padding: var(--space-3xl);
+    color: var(--gray-500);
+}
+
+.blog-home-empty i {
+    font-size: 4rem;
+    margin-bottom: var(--space-md);
+    opacity: 0.3;
+}
+
+/* ========================================
+   BLOG PAGINATION (PROPER)
+======================================== */
+.blog-pagination {
+    display: flex;
+    justify-content: center;
+    margin-top: var(--space-xl);
+}
+
+.pagination {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.pagination li {
+    display: inline-block;
+}
+
+.pagination a,
+.pagination span {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 40px;
+    height: 40px;
+    padding: 0 0.75rem;
+    background: var(--white);
+    color: var(--gray-800);
+    border: 1px solid var(--gray-200);
+    border-radius: var(--radius-md);
+    font-size: 0.9375rem;
+    font-weight: var(--font-weight-medium);
+    transition: all var(--transition-fast);
+}
+
+.pagination a:hover {
+    background: var(--primary-purple);
+    color: var(--white);
+    border-color: var(--primary-purple);
+}
+
+.pagination .active span {
+    background: var(--primary-purple);
+    color: var(--white);
+    border-color: var(--primary-purple);
+}
+
+.pagination .disabled span {
+    color: var(--gray-400);
+    cursor: not-allowed;
+}
